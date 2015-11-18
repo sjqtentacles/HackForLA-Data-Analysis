@@ -10,7 +10,7 @@ I just started this project, but I hope to have it fully refined by Nov. 30, 201
 ***
 
 ### Introduction
-This is an analysis of how well L.A. City's Affordable Housing Trust Fund is doing at meeting resident need for affordable housing. In addition to descriptive stats comparing needs to investment, it employs inferential stats and regressions to look for significant differences in investment and productivity. Overall, my goal is to tell a story, based on the evidence, around the Affordable Housing Trust Fund's efficacy. 
+This is an analysis of how well L.A. City's Affordable Housing Trust Fund is doing at meeting the city's need for affordable housing and, secondarily, at contributing to a livable, prosperous city. In addition to descriptive stats comparing needs to investment, it employs inferential stats and regressions to look for significant differences in investment and productivity. Overall, my goal is to tell a story, based on the evidence, around the Affordable Housing Trust Fund's efficacy. 
 
 Sources:  
 * [HCIDLA Affordable Housing Projects Catalog And Listing (2003 To Present) >>](http://bit.ly/1RYxurG)  
@@ -24,7 +24,7 @@ We'll begin with a few exploratory analyses around need and investment, then up-
 
 #### Exploring
 
-Let's explore some key figures around per-district financial need and the city's Affordable Housing Trust Fund's investments. Below, we'll plot and list each district's median household income (avg), total trust fund investments to date, and total units built or expected to date.
+Let's explore some key figures around per-district financial need and the city's Affordable Housing Trust Fund's investments. Below, we'll plot and list each district's median household income, total trust fund investments to date, and total units built or expected to date.
 
 
 
