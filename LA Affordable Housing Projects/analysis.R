@@ -165,40 +165,48 @@ print(job_cor)
 
 ## Q8. Over the years, how many jobs do we get per investment dollar?
 fit_spend_jobs <- lm(TOTAL_JOBS ~ INVESTMENT, data = d_profiles)
-print(summary(fit_spend_jobs)$coefficients[2,])
+print(paste("Variance explained:", round(summary(fit_spend_jobs)$r.squared, 3)))
+print(paste("Jobs per dollar invested:",
+            round(summary(fit_spend_jobs)$coefficients[2,1], 7), "--OR--",
+            round((summary(fit_spend_jobs)$coefficients[2,1]*100000), 3), "jobs per $100,000 invested"))
 
 ## Now, let's plot the predictor and outcome of concern, along with the regression line.
 ## For the pure R file, let's open up with the graphics device, for saving locally.
-png(filename="figure/spend_jobs.png", height=500, width=500, bg="white")
-plot_inc_spend <- ggplot(d_profiles, aes(x = round(INVESTMENT/1000000, 3), y = TOTAL_JOBS)) +
+png(filename="figure/spend_jobs.png", height=500, width=900, bg="white")
+
+## Now, let's plot the predictor and outcome of concern, along with the regression line.
+plot_spend_jobs <- ggplot(d_profiles, aes(x = round(INVESTMENT/1000000, 3), y = TOTAL_JOBS)) +
     geom_point(color="black") + 
     xlab("Total HCIDLA Investment (in Millions $)") + 
     scale_x_continuous(breaks=c(0,50,100,150,200)) +
     ylab("District Number of Jobs Created") + 
     geom_text(aes(label=COUNCIL.DISTRICT),hjust=1.2, vjust=0) +
     geom_smooth(method = "lm", size = 1, col = "#4AA02C")
-print(plot_inc_spend)
+print(plot_spend_jobs)
 dev.off()
 
 ## Q9. Have any districts been significantly better -or worse- than the whole of districts
 ##     for job creation from investments?
 
-## Looping through t-tests (vs. list apply), because A) I want to handle an error, and
-## B, I'd like to create a data frame of just the values.
-## Need to start with a blank data frame...
+## Looping through t-tests (vs. list apply), because A) I want to handle an error wherein a
+## district's vector only contained one value, and B), I'd like to create a data frame of 
+## just the values.
+
+## Starting with a blank data frame...
 jobs_t_df <- data.frame(DISTRICT = NA,
                         T_SCORE = NA, 
                         P_VALUE = NA, 
                         DEGREES = NA,
                         POWER = NA)
+
+## The loop.
 for(i in 1:15){
     
     ## Get current row count, for later use.
     og_rows <- nrow(clean_jobs)
-        
+    
     ## To handle the error of having only one element in a vector, duplicate the 
-    ## relevant row. Sorry, quick band-aid to loop's stoppage, but it should make no practical
-    ## difference.
+    ## relevant row. 
     if(nrow(clean_jobs[clean_jobs$COUNCIL.DISTRICT == i,]) < 2){
         clean_jobs <- rbind(clean_jobs, clean_jobs[clean_jobs$COUNCIL.DISTRICT == i,])
     }
@@ -206,21 +214,22 @@ for(i in 1:15){
     ## Looped variable value t-test.
     clean_t1 <- t.test(clean_jobs[clean_jobs$COUNCIL.DISTRICT == i,]$JOBS,
                        # clean_jobs[!(clean_jobs$COUNCIL.DISTRICT == i),]$JOBS, # Against other dist values
-                       clean_jobs$JOBS, # Against all dist values.
+                       # (optional)
+                       clean_jobs$JOBS,
                        paired = F)
     
     clean_pow <- pwr.t2n.test(
-                        n1 = length(clean_jobs[clean_jobs$COUNCIL.DISTRICT == i,]$JOBS), 
-                        n2 = length(clean_jobs$JOBS), 
-                        d = as.numeric(clean_t1$statistic), sig.level = .05)
+        n1 = length(clean_jobs[clean_jobs$COUNCIL.DISTRICT == i,]$JOBS), 
+        n2 = length(clean_jobs$JOBS), 
+        d = as.numeric(clean_t1$statistic), sig.level = .05)
     
     jobs_t <- c(
-                i, 
-                as.numeric(round(clean_t1$statistic, 3)), 
-                as.numeric(round(clean_t1$p.value, 3)), 
-                as.numeric(round(clean_t1$parameter, 3)),
-                clean_pow$power
-                )
+        i, 
+        as.numeric(round(clean_t1$statistic, 3)), 
+        as.numeric(round(clean_t1$p.value, 3)), 
+        as.numeric(round(clean_t1$parameter, 3)),
+        clean_pow$power
+    )
     
     ## Append the t test data frame.
     jobs_t_df <- rbind(jobs_t_df, jobs_t)
@@ -234,7 +243,7 @@ for(i in 1:15){
 ## Clean jobs t test df and print only those rows with "significant" p-values.
 jobs_t_df <- na.omit(jobs_t_df)
 row.names(jobs_t_df) <- NULL
-print(jobs_t_df[jobs_t_df$P_VALUE < .05,])
+print(jobs_t_df[jobs_t_df$P_VALUE < .05 & jobs_t_df$DEGREES < (nrow(clean_jobs) - 2),])
 
 ## Compare to total rows in clean_jobs df.
 print(paste("Total records:",nrow(clean_jobs)))
@@ -243,10 +252,11 @@ print(paste("Total records:",nrow(clean_jobs)))
 png(filename="figure/box_jobs.png", height=500, width=500, bg="white")
 cd_jobs <- clean_jobs[,c(7,19)]
 box_jobs <- ggplot(cd_jobs, aes(x=as.factor(COUNCIL.DISTRICT), y=JOBS, fill=as.factor(COUNCIL.DISTRICT))) + 
-            geom_boxplot(outlier.shape = 18, outlier.size = 5, outlier.colour = "black") + 
-            guides(fill=FALSE) +
-            ggtitle("Jobs-Per-Project Distribution, by City Council District") +
-            xlab("City Council District") + ylab("Jobs per Project")
+    geom_boxplot(outlier.shape = 18, outlier.size = 5, outlier.colour = "black") + 
+    scale_y_log10() + geom_hline(yintercept = mean(cd_jobs$JOBS), colour = "red") +
+    guides(fill=FALSE) +
+    ggtitle("Jobs-Per-Project Distribution, by City Council District") +
+    xlab("City Council District") + ylab("Jobs per Project")
 print(box_jobs)
 dev.off()
 
