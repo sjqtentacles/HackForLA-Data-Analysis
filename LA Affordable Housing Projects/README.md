@@ -4,8 +4,8 @@
 
 by [Jude Calvillo](http://linkd.in/1BGeytb)
 
-### Qualifier / Status (as of 11/18/15)
-I just started this project, but I hope to have it fully refined by Nov. 30, 2015. In the meantime, I invite you to review it below.
+### Qualifier / Status (as of 11/21/15)
+I only recently started this project, but I hope to have it fully refined by Nov. 30, 2015. In the meantime, I invite you to review it below.
 
 ***
 
@@ -112,7 +112,7 @@ It looks like number of housing units has had a *very strong* correlation with d
 
 Below, you'll note that funding dollar is highly predictive of number of units developed, explaining > 92% of the variance in units developed. This also implies that, between districts, developers remain roughly equal in their efficiency, and/or that the HCIDLA Trust Fund is fairly vigilent about enforcing a certain degree of efficiency (below).
 
-*This is also currently at a higher dimension (districts). I may or may not ultimately dig into the lower dimension, for the sake of overall parsimony.*  
+*This is also currently at a higher level/dimension (districts). I may or may not ultimately dig into the lower dimension, for the sake of overall parsimony.*  
 
 
 ```
@@ -120,12 +120,14 @@ Below, you'll note that funding dollar is highly predictive of number of units d
 ```
 
 ```
-## [1] "Units per dollar invested: 1.92e-05"
+## [1] "Units per dollar invested: 1.92e-05 --OR-- 1.916 units per $100,000 invested"
 ```
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
 
 ##### Q5. Over the years, how well has job creation corresponded to HCIDLA dollars funded?
+
+Over the years, number of jobs created per district has been highly correlated with HCIDLA funding total per district. If these had not been highly correlated, it would have suggested that a significant number of projects in one or more districts were employing fewer workers per dollar given. Instead, it suggests that, irrespective of differences in dollars funded over the years (Q2), between their projects, most districts are about equally productive in creating jobs from HCIDLA funds.
 
 
 ```
@@ -144,36 +146,49 @@ Below, you'll note that funding dollar is highly predictive of number of units d
 
 ##### Q6. Over the years, how predictive has HCIDLA funding dollar been of job creation? And how many jobs have been created per HCIDLA funding dollar thus far?
 
+It looks like funding dollar is indeed highly predictive of job creation, to the tune of about 3.86 jobs for every $100,000 funded. 
+
 
 ```
 ## [1] "Variance explained: 0.902"
 ```
 
 ```
-## [1] "Jobs per dollar invested: 3.68e-05"
+## [1] "Jobs per dollar invested: 3.68e-05 --OR-- 3.68 jobs per $100,000 invested"
 ```
 
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
 
 ##### Q9. Have any districts been significantly better -or worse- than the whole of districts for job creation from HCIDLA investments?
 
+The following districts have been statistically significantly better -or worse- than the population of districts for job creation from investments over time. The "T-Scores" you see below indicate both direction and severity, wherein the value shown is the number of standard deviations away from the mean of jobs created per project across districts.
+
 
 ```
-##    DISTRICT T_SCORE P_VALUE DEGREES     POWER
-## 3         3   3.068   0.014   8.860 1.0000000
-## 5         5  -2.891   0.004 249.000 0.9819666
-## 10       10  -2.438   0.022  26.279 1.0000000
-## 12       12  -6.444   0.000  15.507 1.0000000
-## 15       15   2.308   0.036  14.907 1.0000000
+##    DISTRICT T_SCORE P_VALUE DEGREES POWER
+## 3         3   3.068   0.014   8.860     1
+## 10       10  -2.438   0.022  26.279     1
+## 12       12  -6.444   0.000  15.507     1
+## 15       15   2.308   0.036  14.907     1
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+##### 9B. PLOT: Jobs-per-Project, By City Council District ([how to read box-plots?](http://flowingdata.com/2008/02/15/how-to-read-and-use-a-box-and-whisker-plot/))
+The boxplot below should further inform policymakers. It plots districts' per-project job distributions vs. the mean of jobs per project across the city. From this, one can discern that...
+* Since most districts' (12 out of 15) median lines fall below the city's overall mean, this means that most districts have many smaller projects and a handful of larger projects.
+* When reconciled with the job creation statistics above, projects in districts 10 and 12 really haven't been so good for job creation, and projects in districts 3 and 15 really have been overperforming for job creation, despite a negative outlier in district 3.  
+
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
+
+*Please note: I've employed a log10 transformation to make districts' distributions easier to see, relative to the extreme ends of their overall y scale.*
 
 
 ### Footnote
-Thanks for your time and consideration. I'll be completing this as soon as possible!
+Thanks for your time and consideration. If you have any questions/concerns, or if you'd like to discuss statistics/data science for your government agency, please feel free to contact me (below).
 
 Sincerely,  
-*Jude C.*
+*Jude C.*  
+[Contact me >>](http://www.sovereignmarket.com/contact-us/email-us/)  
+[Connect on LinkedIn >>](http://linkd.in/1BGeytb)
+
 
 
